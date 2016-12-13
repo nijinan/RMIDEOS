@@ -1,0 +1,1866 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<html lang="en" class=" is-copy-enabled is-u2f-enabled">
+  <head prefix="og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# object: http://ogp.me/ns/object# article: http://ogp.me/ns/article# profile: http://ogp.me/ns/profile#">
+    <meta charset="utf-8"/>
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/frameworks-e53fc1ddbde2a9e5645df620f65c80ef723c741b33293b6f22a2b7f2c8145fcf.css" integrity="sha256-5T/B3b3iqeVkXfYg9lyA73I8dBszKTtvIqK38sgUX88=" media="all" rel="stylesheet"/>
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/github-4664ce357daee067bd8ee8e99e0833d04b115022dbf4ca637241c0f7d1f832b7.css" integrity="sha256-RmTONX2u4Ge9jujpnggz0EsRUCLb9MpjckHA99H4Mrc=" media="all" rel="stylesheet"/>
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/site-4b977eeae4ecbfd2f7a7ad7788382645b21e771bbf47835e3793edb12292ff2e.css" integrity="sha256-S5d+6uTsv9L3p613iDgmRbIedxu/R4NeN5PtsSKS/y4=" media="all" rel="stylesheet"/>
+    <link as="script" href="https://assets-cdn.github.com/assets/frameworks-404cdd1add1f710db016a02e5e31fff8a9089d14ff0c227df862b780886db7d5.js" rel="preload"/>
+    <link as="script" href="https://assets-cdn.github.com/assets/github-bda6c8f3d777243f9192f7725d680673aa13394eaeee5081e53f00e42e950028.js" rel="preload"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta http-equiv="Content-Language" content="en"/>
+    <meta name="viewport" content="width=device-width"/>
+    <meta content="origin-when-cross-origin" name="referrer"/>
+    <title>
+      Using Lucene 4 to calculate cosine similarity · GitHub
+    </title>
+    <link rel="search" type="application/opensearchdescription+xml" href="/opensearch.xml" title="GitHub"/>
+    <link rel="fluid-icon" href="https://gist.github.com/fluidicon.png" title="GitHub"/>
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png"/>
+    <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png"/>
+    <link rel="apple-touch-icon" sizes="76x76" href="/apple-touch-icon-76x76.png"/>
+    <link rel="apple-touch-icon" sizes="114x114" href="/apple-touch-icon-114x114.png"/>
+    <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon-120x120.png"/>
+    <link rel="apple-touch-icon" sizes="144x144" href="/apple-touch-icon-144x144.png"/>
+    <link rel="apple-touch-icon" sizes="152x152" href="/apple-touch-icon-152x152.png"/>
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon-180x180.png"/>
+    <meta property="fb:app_id" content="1401488693436528"/>
+    <meta content="https://avatars0.githubusercontent.com/u/756867?v=3&amp;s=400" name="twitter:image:src"/>
+    <meta content="@github" name="twitter:site"/>
+    <meta content="summary" name="twitter:card"/>
+    <meta content="Using Lucene 4 to calculate cosine similarity" name="twitter:title"/>
+    <meta content="Using Lucene 4 to calculate cosine similarity" name="twitter:description"/>
+    <meta content="https://avatars0.githubusercontent.com/u/756867?v=3&amp;s=400" property="og:image"/>
+    <meta content="Gist" property="og:site_name"/>
+    <meta content="object" property="og:type"/>
+    <meta content="Using Lucene 4 to calculate cosine similarity" property="og:title"/>
+    <meta content="https://gist.github.com/butlermh/4672977" property="og:url"/>
+    <meta content="Using Lucene 4 to calculate cosine similarity" property="og:description"/>
+    <meta name="browser-stats-url" content="https://api.github.com/_private/browser/stats"/>
+    <meta name="browser-errors-url" content="https://api.github.com/_private/browser/errors"/>
+    <link rel="assets" href="https://assets-cdn.github.com/"/>
+    <meta name="pjax-timeout" content="1000"/>
+    <meta name="msapplication-TileImage" content="/windows-tile.png"/>
+    <meta name="msapplication-TileColor" content="#ffffff"/>
+    <meta name="selected-link" value="gist_code" data-pjax-transient=""/>
+    <meta name="google-site-verification" content="KT5gs8h0wvaagLKAVWq8bbeNwnZZK1r1XQysX3xurLU"/>
+    <meta name="google-site-verification" content="ZzhVyEFwb7w3e0-uOTltm8Jsck2F5StVihD0exw2fsA"/>
+    <meta name="google-analytics" content="UA-3769691-4"/>
+    <meta content="collector.githubapp.com" name="octolytics-host"/>
+    <meta content="gist" name="octolytics-app-id"/>
+    <meta content="2F591F88:2D36F:6422935:57905984" name="octolytics-dimension-request_id"/>
+    <meta content="/&lt;user-name>/&lt;gist-id>" data-pjax-transient="true" name="analytics-location"/>
+    <meta class="js-ga-set" name="dimension1" content="Logged Out"/>
+    <meta content="true" name="octolytics-dimension-public"/>
+    <meta content="4672977" name="octolytics-dimension-gist_id"/>
+    <meta content="4672977" name="octolytics-dimension-gist_name"/>
+    <meta content="false" name="octolytics-dimension-anonymous"/>
+    <meta content="756867" name="octolytics-dimension-owner_id"/>
+    <meta content="butlermh" name="octolytics-dimension-owner_login"/>
+    <meta content="false" name="octolytics-dimension-forked"/>
+    <meta class="js-ga-set" name="dimension5" content="public"/>
+    <meta class="js-ga-set" name="dimension6" content="owned"/>
+    <meta class="js-ga-set" name="dimension7" content="java"/>
+    <meta name="hostname" content="gist.github.com"/>
+    <meta name="user-login" content=""/>
+    <meta name="expected-hostname" content="gist.github.com"/>
+    <meta name="js-proxy-site-detection-payload" content="NzU0NGY2ZTIzZTUwN2ZhN2YzNGE0OGY4ZDU0OGJkYmRjY2EwOGJkYjdkMGVlMzc2ODA1NzEwNmYzMTVhZTA5MHx7InJlbW90ZV9hZGRyZXNzIjoiNDcuODkuMzEuMTM2IiwicmVxdWVzdF9pZCI6IjJGNTkxRjg4OjJEMzZGOjY0MjI5MzU6NTc5MDU5ODQiLCJ0aW1lc3RhbXAiOjE0NjkwNzc4OTJ9"/>
+    <link rel="mask-icon" href="https://assets-cdn.github.com/pinned-octocat.svg" color="#4078c0"/>
+    <link rel="icon" type="image/x-icon" href="https://assets-cdn.github.com/favicon.ico"/>
+    <meta name="html-safe-nonce" content="d433f056a4ebbdbd7942ef4480d529f06152d77e"/>
+    <meta content="592ffe5cb93c68647d821b2df044170e140e1db6" name="form-nonce"/>
+    <meta http-equiv="x-pjax-version" content="c85c9b6f8432cc7b07e5ce5161e4d4fc"/>
+    <link href="/butlermh.atom" rel="alternate" title="atom" type="application/atom+xml"/>
+    <link crossorigin="anonymous" href="https://assets-cdn.github.com/assets/gist-8023a6701460564568375656828f60112d6894587d6f9a03b77d18a97f6d8fc6.css" integrity="sha256-gCOmcBRgVkVoN1ZWgo9gES1olFh9b5oDt30YqX9tj8Y=" media="all" rel="stylesheet"/>
+  </head>
+  <body class="logged-out   env-production windows">
+    <div id="js-pjax-loader-bar" class="pjax-loader-bar">
+    </div>
+    <a href="#start-of-content" tabindex="1" class="accessibility-aid js-skip-to-content">
+      Skip to content
+    </a>
+    <div class="header gist-header header-logged-out" role="banner">
+      <div class="container clearfix">
+        <a href="/" aria-label="Gist Homepage" class="header-logo-wordmark" data-hotkey="g d">
+          <svg aria-hidden="true" class="octicon octicon-logo-github" height="28" version="1.1" viewbox="0 0 45 16" width="78">
+            <path d="M18.53 12.03h-.02c.009 0 .015.01.024.011h.006l-.01-.01zm.004.011c-.093.001-.327.05-.574.05-.78 0-1.05-.36-1.05-.83V8.13h1.59c.09 0 .16-.08.16-.19v-1.7c0-.09-.08-.17-.16-.17h-1.59V3.96c0-.08-.05-.13-.14-.13h-2.16c-.09 0-.14.05-.14.13v2.17s-1.09.27-1.16.28c-.08.02-.13.09-.13.17v1.36c0 .11.08.19.17.19h1.11v3.28c0 2.44 1.7 2.69 2.86 2.69.53 0 1.17-.17 1.27-.22.06-.02.09-.09.09-.16v-1.5a.177.177 0 0 0-.146-.18zm23.696-2.2c0-1.81-.73-2.05-1.5-1.97-.6.04-1.08.34-1.08.34v3.52s.49.34 1.22.36c1.03.03 1.36-.34 1.36-2.25zm2.43-.16c0 3.43-1.11 4.41-3.05 4.41-1.64 0-2.52-.83-2.52-.83s-.04.46-.09.52c-.03.06-.08.08-.14.08h-1.48c-.1 0-.19-.08-.19-.17l.02-11.11c0-.09.08-.17.17-.17h2.13c.09 0 .17.08.17.17v3.77s.82-.53 2.02-.53l-.01-.02c1.2 0 2.97.45 2.97 3.88zm-8.72-3.61H33.84c-.11 0-.17.08-.17.19v5.44s-.55.39-1.3.39-.97-.34-.97-1.09V6.25c0-.09-.08-.17-.17-.17h-2.14c-.09 0-.17.08-.17.17v5.11c0 2.2 1.23 2.75 2.92 2.75 1.39 0 2.52-.77 2.52-.77s.05.39.08.45c.02.05.09.09.16.09h1.34c.11 0 .17-.08.17-.17l.02-7.47c0-.09-.08-.17-.19-.17zm-23.7-.01h-2.13c-.09 0-.17.09-.17.2v7.34c0 .2.13.27.3.27h1.92c.2 0 .25-.09.25-.27V6.23c0-.09-.08-.17-.17-.17zm-1.05-3.38c-.77 0-1.38.61-1.38 1.38 0 .77.61 1.38 1.38 1.38.75 0 1.36-.61 1.36-1.38 0-.77-.61-1.38-1.36-1.38zm16.49-.25h-2.11c-.09 0-.17.08-.17.17v4.09h-3.31V2.6c0-.09-.08-.17-.17-.17h-2.13c-.09 0-.17.08-.17.17v11.11c0 .09.09.17.17.17h2.13c.09 0 .17-.08.17-.17V8.96h3.31l-.02 4.75c0 .09.08.17.17.17h2.13c.09 0 .17-.08.17-.17V2.6c0-.09-.08-.17-.17-.17zM8.81 7.35v5.74c0 .04-.01.11-.06.13 0 0-1.25.89-3.31.89-2.49 0-5.44-.78-5.44-5.92S2.58 1.99 5.1 2c2.18 0 3.06.49 3.2.58.04.05.06.09.06.14L7.94 4.5c0 .09-.09.2-.2.17-.36-.11-.9-.33-2.17-.33-1.47 0-3.05.42-3.05 3.73s1.5 3.7 2.58 3.7c.92 0 1.25-.11 1.25-.11v-2.3H4.88c-.11 0-.19-.08-.19-.17V7.35c0-.09.08-.17.19-.17h3.74c.11 0 .19.08.19.17z">
+            </path>
+          </svg>
+          <svg aria-hidden="true" class="octicon octicon-logo-gist" height="28" version="1.1" viewbox="0 0 25 16" width="40">
+            <path d="M4.7 8.73h2.45v4.02c-.55.27-1.64.34-2.53.34-2.56 0-3.47-2.2-3.47-5.05 0-2.85.91-5.06 3.48-5.06 1.28 0 2.06.23 3.28.73V2.66C7.27 2.33 6.25 2 4.63 2 1.13 2 0 4.69 0 8.03c0 3.34 1.11 6.03 4.63 6.03 1.64 0 2.81-.27 3.59-.64V7.73H4.7v1zm6.39 3.72V6.06h-1.05v6.28c0 1.25.58 1.72 1.72 1.72v-.89c-.48 0-.67-.16-.67-.7v-.02zm.25-8.72c0-.44-.33-.78-.78-.78s-.77.34-.77.78.33.78.77.78.78-.34.78-.78zm4.34 5.69c-1.5-.13-1.78-.48-1.78-1.17 0-.77.33-1.34 1.88-1.34 1.05 0 1.66.16 2.27.36v-.94c-.69-.3-1.52-.39-2.25-.39-2.2 0-2.92 1.2-2.92 2.31 0 1.08.47 1.88 2.73 2.08 1.55.13 1.77.63 1.77 1.34 0 .73-.44 1.42-2.06 1.42-1.11 0-1.86-.19-2.33-.36v.94c.5.2 1.58.39 2.33.39 2.38 0 3.14-1.2 3.14-2.41 0-1.28-.53-2.03-2.75-2.23h-.03zm8.58-2.47v-.86h-2.42v-2.5l-1.08.31v2.11l-1.56.44v.48h1.56v5c0 1.53 1.19 2.13 2.5 2.13.19 0 .52-.02.69-.05v-.89c-.19.03-.41.03-.61.03-.97 0-1.5-.39-1.5-1.34V6.94h2.42v.02-.01z">
+            </path>
+          </svg>
+        </a>
+        <div class="site-search js-site-search" role="search">
+          <div class="header-search" role="search">
+            <!-- </textarea> -->            <!-- '"` -->            <form accept-charset="UTF-8" action="/search" class="position-relative" method="get">
+              <div style="margin:0;padding:0;display:inline">
+                <input name="utf8" type="hidden" value="✓"/>
+              </div>
+              <label class="header-search-wrapper form-control js-chromeless-input-container">
+                <input type="text" class="form-control js-site-search-focus header-search-input" data-hotkey="s" name="q" placeholder="Search…" tabindex="1" autocorrect="off" autocomplete="off" autocapitalize="off"/>
+              </label>
+            </form>
+          </div>
+        </div>
+        <ul class="header-nav left" role="navigation">
+          <li class="header-nav-item">
+            <a href="/discover" class="header-nav-link" data-ga-click="Header, go to all gists, text:all gists">
+              All gists
+            </a>
+          </li>
+          <li class="header-nav-item">
+            <a href="https://github.com" class="header-nav-link" data-ga-click="Header, go to GitHub, text:GitHub">
+              GitHub
+            </a>
+          </li>
+        </ul>
+        <div class="header-actions" role="navigation">
+          <a href="/join?source=header-gist" class="btn btn-primary" data-ga-click="Header, sign up">
+            Sign up for a GitHub account
+          </a>
+          <a href="https://gist.github.com/auth/github?return_to=gist" class="btn" data-ga-click="Header, sign in">
+            Sign in
+          </a>
+        </div>
+      </div>
+    </div>
+    <div id="start-of-content" class="accessibility-aid">
+    </div>
+    <div id="js-flash-container">
+    </div>
+    <div role="main">
+      <div itemscope="" itemtype="http://schema.org/Code">
+        <div id="gist-pjax-container" class="gist-content-wrapper" data-pjax-container="">
+          <div class="gist-detail-intro gist-banner">
+            <div class="container">
+              <a href="/" class="btn btn-outline right">
+                Create a gist now
+              </a>
+              <p class="lead">
+                
+          Instantly share code, notes, and snippets.
+        
+              </p>
+            </div>
+          </div>
+          <div class="gisthead pagehead repohead instapaper_ignore readability-menu experiment-repo-nav">
+            <div class="container">
+              <div class="container repohead-details-container">
+                <ul class="pagehead-actions">
+                  <li>
+                    <a href="/login?return_to=https%3A%2F%2Fgist.github.com%2Fbutlermh%2F4672977" aria-label="You must be signed in to star a gist" class="btn btn-sm btn-with-count tooltipped tooltipped-n" rel="nofollow">
+                      <svg aria-hidden="true" class="octicon octicon-star" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                        <path d="M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74z">
+                        </path>
+                      </svg>
+                      
+    Star
+
+                    </a>
+                    <a href="/butlermh/4672977/stargazers" class="social-count">
+                      
+    4
+
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/login?return_to=https%3A%2F%2Fgist.github.com%2Fbutlermh%2F4672977" aria-label="You must be signed in to fork a gist" class="btn btn-sm btn-with-count tooltipped tooltipped-n" rel="nofollow">
+                      <svg aria-hidden="true" class="octicon octicon-repo-forked" height="16" version="1.1" viewbox="0 0 10 16" width="10">
+                        <path d="M8 1a1.993 1.993 0 0 0-1 3.72V6L5 8 3 6V4.72A1.993 1.993 0 0 0 2 1a1.993 1.993 0 0 0-1 3.72V6.5l3 3v1.78A1.993 1.993 0 0 0 5 15a1.993 1.993 0 0 0 1-3.72V9.5l3-3V4.72A1.993 1.993 0 0 0 8 1zM2 4.2C1.34 4.2.8 3.65.8 3c0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3 10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2zm3-10c-.66 0-1.2-.55-1.2-1.2 0-.65.55-1.2 1.2-1.2.65 0 1.2.55 1.2 1.2 0 .65-.55 1.2-1.2 1.2z">
+                        </path>
+                      </svg>
+                      
+    Fork
+
+                    </a>
+                    <a href="/butlermh/4672977/forks" class="social-count">
+                      
+    0
+
+                    </a>
+                  </li>
+                </ul>
+                <h1 class="public css-truncate">
+                  <img alt="@butlermh" class="avatar gist-avatar" height="26" src="https://avatars3.githubusercontent.com/u/756867?v=3&amp;s=52" width="26"/>
+                  <span class="author">
+                    <a href="/butlermh" class="url fn" rel="author">
+                      <span itemprop="author">
+                        butlermh
+                      </span>
+                    </a>
+                  </span>
+                  <!--
+        -->                  <span class="path-divider">
+                    /
+                  </span>
+                  <!--
+        -->                  <strong itemprop="name" class="gist-header-title css-truncate-target">
+                    <a href="/butlermh/4672977">
+                      lucene4cosine.java
+                    </a>
+                  </strong>
+                  <div class="gist-timestamp">
+                    Created 
+                    <time-ago datetime="2013-01-30T12:32:15Z">
+                      Jan 30, 2013
+                    </time-ago>
+                  </div>
+                </h1>
+              </div>
+              <div class="container gist-file-navigation">
+                <div class="right file-navigation-options" data-multiple="">
+                  <div class="file-navigation-option">
+                    <input type="hidden" name="protocol_type" value="clone"/>
+                    <div class="select-menu js-menu-container js-select-menu">
+                      <div class="input-group js-select-button js-zeroclipboard-container">
+                        <div class="input-group-button">
+                          <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone Embed, location:repo overview">
+                            
+    Embed
+  
+                          </button>
+                        </div>
+                        <input type="text" class="form-control input-monospace input-sm js-zeroclipboard-target js-url-field" value="&lt;script src=&quot;https://gist.github.com/butlermh/4672977.js&quot;>&lt;/script>" aria-label="Clone this repository at &lt;script src=&quot;https://gist.github.com/butlermh/4672977.js&quot;>&lt;/script>" readonly=""/>
+                        <div class="input-group-button">
+                          <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button">
+                            <svg aria-hidden="true" class="octicon octicon-clippy" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                              <path d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z">
+                              </path>
+                            </svg>
+                          </button>
+                        </div>
+                      </div>
+                      <div class="select-menu-modal-holder">
+                        <div class="select-menu-modal js-menu-content" aria-hidden="true">
+                          <div class="select-menu-header">
+                            <svg aria-label="Close" class="octicon octicon-x js-menu-close" height="16" role="img" version="1.1" viewbox="0 0 12 16" width="12">
+                              <path d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z">
+                              </path>
+                            </svg>
+                            <span class="select-menu-title">
+                              What would you like to do?
+                            </span>
+                          </div>
+                          <div class="select-menu-list js-navigation-container" role="menu">
+                            <div class="select-menu-item js-navigation-item selected" role="menuitem" tabindex="0">
+                              <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+                                <path d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z">
+                                </path>
+                              </svg>
+                              <div class="select-menu-item-text">
+                                <input type="radio" name="protocol_selector" value="embed" checked=""/>
+                                <span class="select-menu-item-heading">
+                                  
+                  
+                  Embed
+                
+                                </span>
+                                <span class="description">
+                                  
+                    Embed this gist in your website.
+                  
+                                </span>
+                                <span class="js-select-button-text hidden-select-button-text">
+                                  <div class="input-group-button">
+                                    <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone Embed, location:repo overview">
+                                      
+    Embed
+  
+                                    </button>
+                                  </div>
+                                  <input type="text" class="form-control input-monospace input-sm js-zeroclipboard-target js-url-field" value="&lt;script src=&quot;https://gist.github.com/butlermh/4672977.js&quot;>&lt;/script>" aria-label="Clone this repository at &lt;script src=&quot;https://gist.github.com/butlermh/4672977.js&quot;>&lt;/script>" readonly=""/>
+                                  <div class="input-group-button">
+                                    <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button">
+                                      <svg aria-hidden="true" class="octicon octicon-clippy" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                                        <path d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z">
+                                        </path>
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                              <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+                                <path d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z">
+                                </path>
+                              </svg>
+                              <div class="select-menu-item-text">
+                                <input type="radio" name="protocol_selector" value="share"/>
+                                <span class="select-menu-item-heading">
+                                  
+                  
+                  Share
+                
+                                </span>
+                                <span class="description">
+                                  
+                    Copy sharable URL for this gist.
+                  
+                                </span>
+                                <span class="js-select-button-text hidden-select-button-text">
+                                  <div class="input-group-button">
+                                    <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone Share, location:repo overview">
+                                      
+    Share
+  
+                                    </button>
+                                  </div>
+                                  <input type="text" class="form-control input-monospace input-sm js-zeroclipboard-target js-url-field" value="https://gist.github.com/butlermh/4672977" aria-label="Clone this repository at https://gist.github.com/butlermh/4672977" readonly=""/>
+                                  <div class="input-group-button">
+                                    <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button">
+                                      <svg aria-hidden="true" class="octicon octicon-clippy" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                                        <path d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z">
+                                        </path>
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                            <div class="select-menu-item js-navigation-item " role="menuitem" tabindex="0">
+                              <svg aria-hidden="true" class="octicon octicon-check select-menu-item-icon" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+                                <path d="M12 5l-8 8-4-4 1.5-1.5L4 10l6.5-6.5z">
+                                </path>
+                              </svg>
+                              <div class="select-menu-item-text">
+                                <input type="radio" name="protocol_selector" value="http"/>
+                                <span class="select-menu-item-heading">
+                                  
+                  Clone via
+                  HTTPS
+                
+                                </span>
+                                <span class="description">
+                                  
+                    Clone with Git or checkout with SVN using the repository's web address.
+                  
+                                </span>
+                                <span class="js-select-button-text hidden-select-button-text">
+                                  <div class="input-group-button">
+                                    <button type="button" class="btn btn-sm select-menu-button js-menu-target" data-ga-click="Repository, clone HTTPS, location:repo overview">
+                                      
+    HTTPS
+  
+                                    </button>
+                                  </div>
+                                  <input type="text" class="form-control input-monospace input-sm js-zeroclipboard-target js-url-field" value="https://gist.github.com/4672977.git" aria-label="Clone this repository at https://gist.github.com/4672977.git" readonly=""/>
+                                  <div class="input-group-button">
+                                    <button aria-label="Copy to clipboard" class="js-zeroclipboard btn btn-sm zeroclipboard-button tooltipped tooltipped-s" data-copied-hint="Copied!" type="button">
+                                      <svg aria-hidden="true" class="octicon octicon-clippy" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                                        <path d="M2 13h4v1H2v-1zm5-6H2v1h5V7zm2 3V8l-3 3 3 3v-2h5v-2H9zM4.5 9H2v1h2.5V9zM2 12h2.5v-1H2v1zm9 1h1v2c-.02.28-.11.52-.3.7-.19.18-.42.28-.7.3H1c-.55 0-1-.45-1-1V4c0-.55.45-1 1-1h3c0-1.11.89-2 2-2 1.11 0 2 .89 2 2h3c.55 0 1 .45 1 1v5h-1V6H1v9h10v-2zM2 5h8c0-.55-.45-1-1-1H8c-.55 0-1-.45-1-1s-.45-1-1-1-1 .45-1 1-.45 1-1 1H3c-.55 0-1 .45-1 1z">
+                                        </path>
+                                      </svg>
+                                    </button>
+                                  </div>
+                                </span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="select-menu-list" role="menu">
+                            <a class="select-menu-item select-menu-action" href="https://help.github.com/articles/which-remote-url-should-i-use" target="_blank">
+                              <svg aria-hidden="true" class="octicon octicon-question select-menu-item-icon" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                                <path d="M6 10h2v2H6v-2zm4-3.5C10 8.64 8 9 8 9H6c0-.55.45-1 1-1h.5c.28 0 .5-.22.5-.5v-1c0-.28-.22-.5-.5-.5h-1c-.28 0-.5.22-.5.5V7H4c0-1.5 1.5-3 3-3s3 1 3 2.5zM7 2.3c3.14 0 5.7 2.56 5.7 5.7s-2.56 5.7-5.7 5.7A5.71 5.71 0 0 1 1.3 8c0-3.14 2.56-5.7 5.7-5.7zM7 1C3.14 1 0 4.14 0 8s3.14 7 7 7 7-3.14 7-7-3.14-7-7-7z">
+                                </path>
+                              </svg>
+                              <div class="select-menu-item-text">
+                                
+              Learn more about clone URLs
+            
+                              </div>
+                            </a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="file-navigation-option">
+                    <a href="https://windows.github.com" class="btn btn-sm tooltipped tooltipped-s tooltipped-multiline" aria-label="Save butlermh/4672977 to your computer and use it in GitHub Desktop.">
+                      <svg aria-hidden="true" class="octicon octicon-desktop-download" height="16" version="1.1" viewbox="0 0 16 16" width="16">
+                        <path d="M4 6h3V0h2v6h3l-4 4-4-4zm11-4h-4v1h4v8H1V3h4V2H1c-.55 0-1 .45-1 1v9c0 .55.45 1 1 1h5.34c-.25.61-.86 1.39-2.34 2h8c-1.48-.61-2.09-1.39-2.34-2H15c.55 0 1-.45 1-1V3c0-.55-.45-1-1-1z">
+                        </path>
+                      </svg>
+                    </a>
+                  </div>
+                  <div class="file-navigation-option">
+                    <a href="/butlermh/4672977/archive/eb5e5a9dd367ec2125c3805cb0a1896220f3d386.zip" class="btn btn-sm" rel="nofollow" data-ga-click="Gist, download zip, location:gist overview">
+                      
+        Download ZIP
+      
+                    </a>
+                  </div>
+                </div>
+                <div class="left">
+                  <nav class="reponav js-repo-nav js-sidenav-container-pjax" role="navigation" data-pjax="#gist-pjax-container">
+                    <a href="/butlermh/4672977" aria-label="Code" aria-selected="true" class="js-selected-navigation-item selected reponav-item" data-hotkey="g c" data-pjax="true" data-selected-links="gist_code /butlermh/4672977">
+                      <svg aria-hidden="true" class="octicon octicon-code" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                        <path d="M9.5 3L8 4.5 11.5 8 8 11.5 9.5 13 14 8 9.5 3zm-5 0L0 8l4.5 5L6 11.5 2.5 8 6 4.5 4.5 3z">
+                        </path>
+                      </svg>
+                      
+    Code
+
+                    </a>
+                    <a href="/butlermh/4672977/revisions" aria-label="Revisions" class="js-selected-navigation-item reponav-item" data-hotkey="g r" data-pjax="true" data-selected-links="gist_revisions /butlermh/4672977/revisions">
+                      <svg aria-hidden="true" class="octicon octicon-git-commit" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                        <path d="M10.86 7c-.45-1.72-2-3-3.86-3-1.86 0-3.41 1.28-3.86 3H0v2h3.14c.45 1.72 2 3 3.86 3 1.86 0 3.41-1.28 3.86-3H14V7h-3.14zM7 10.2c-1.22 0-2.2-.98-2.2-2.2 0-1.22.98-2.2 2.2-2.2 1.22 0 2.2.98 2.2 2.2 0 1.22-.98 2.2-2.2 2.2z">
+                        </path>
+                      </svg>
+                      
+      Revisions
+      
+                      <span class="counter">
+                        1
+                      </span>
+                    </a>
+                    <a href="/butlermh/4672977/stargazers" aria-label="Stars" class="js-selected-navigation-item reponav-item" data-hotkey="g s" data-pjax="true" data-selected-links="gist_stars /butlermh/4672977/stargazers">
+                      <svg aria-hidden="true" class="octicon octicon-star" height="16" version="1.1" viewbox="0 0 14 16" width="14">
+                        <path d="M14 6l-4.9-.64L7 1 4.9 5.36 0 6l3.6 3.26L2.67 14 7 11.67 11.33 14l-.93-4.74z">
+                        </path>
+                      </svg>
+                      
+      Stars
+      
+                      <span class="counter">
+                        4
+                      </span>
+                    </a>
+                  </nav>
+                </div>
+              </div>
+            </div>
+            <!-- /.container -->          </div>
+          <!-- /.repohead -->          <div class="container new-discussion-timeline experiment-repo-nav">
+            <div class="repository-content gist-content">
+              <div>
+                <div class="repository-meta js-details-container">
+                  <div class="repository-meta-content" itemprop="about">
+                    
+    Using Lucene 4 to calculate cosine similarity
+  
+                  </div>
+                </div>
+                <div class="js-gist-file-update-container js-task-list-container file-box">
+                  <div id="file-lucene4cosine-java" class="file">
+                    <div class="file-header">
+                      <div class="file-actions">
+                        <a href="/butlermh/4672977/raw/eb5e5a9dd367ec2125c3805cb0a1896220f3d386/lucene4cosine.java" class="btn btn-sm ">
+                          Raw
+                        </a>
+                      </div>
+                      <div class="file-info">
+                        <span class="icon">
+                          <svg aria-hidden="true" class="octicon octicon-gist" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+                            <path d="M7.5 5L10 7.5 7.5 10l-.75-.75L8.5 7.5 6.75 5.75 7.5 5zm-3 0L2 7.5 4.5 10l.75-.75L3.5 7.5l1.75-1.75L4.5 5zM0 13V2c0-.55.45-1 1-1h10c.55 0 1 .45 1 1v11c0 .55-.45 1-1 1H1c-.55 0-1-.45-1-1zm1 0h10V2H1v11z">
+                            </path>
+                          </svg>
+                        </span>
+                        <a class="tooltipped tooltipped-s css-truncate" aria-label="Permalink" href="#file-lucene4cosine-java">
+                          <strong class="user-select-contain gist-blob-name css-truncate-target">
+                            
+              lucene4cosine.java
+            
+                          </strong>
+                        </a>
+                      </div>
+                    </div>
+                    <div itemprop="text" class="blob-wrapper data type-java">
+                      <table class="highlight tab-size js-file-line-container" data-tab-size="8">
+                        <tbody>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L1" class="blob-num js-line-number" data-line-number="1"/>
+                            <td id="file-lucene4cosine-java-LC1" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                java.io.IOException
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L2" class="blob-num js-line-number" data-line-number="2"/>
+                            <td id="file-lucene4cosine-java-LC2" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                java.util.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L3" class="blob-num js-line-number" data-line-number="3"/>
+                            <td id="file-lucene4cosine-java-LC3" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                java.util.Map
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L4" class="blob-num js-line-number" data-line-number="4"/>
+                            <td id="file-lucene4cosine-java-LC4" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                java.util.Set
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L5" class="blob-num js-line-number" data-line-number="5"/>
+                            <td id="file-lucene4cosine-java-LC5" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L6" class="blob-num js-line-number" data-line-number="6"/>
+                            <td id="file-lucene4cosine-java-LC6" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.commons.math3.linear.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L7" class="blob-num js-line-number" data-line-number="7"/>
+                            <td id="file-lucene4cosine-java-LC7" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.lucene.analysis.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L8" class="blob-num js-line-number" data-line-number="8"/>
+                            <td id="file-lucene4cosine-java-LC8" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.lucene.document.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L9" class="blob-num js-line-number" data-line-number="9"/>
+                            <td id="file-lucene4cosine-java-LC9" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.lucene.index.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L10" class="blob-num js-line-number" data-line-number="10"/>
+                            <td id="file-lucene4cosine-java-LC10" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.lucene.store.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L11" class="blob-num js-line-number" data-line-number="11"/>
+                            <td id="file-lucene4cosine-java-LC11" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                import
+                              </span>
+                              <span class="pl-smi">
+                                org.apache.lucene.util.*
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L12" class="blob-num js-line-number" data-line-number="12"/>
+                            <td id="file-lucene4cosine-java-LC12" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L13" class="blob-num js-line-number" data-line-number="13"/>
+                            <td id="file-lucene4cosine-java-LC13" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                public
+                              </span>
+                              <span class="pl-k">
+                                class
+                              </span>
+                              <span class="pl-en">
+                                CosineDocumentSimilarity
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L14" class="blob-num js-line-number" data-line-number="14"/>
+                            <td id="file-lucene4cosine-java-LC14" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L15" class="blob-num js-line-number" data-line-number="15"/>
+                            <td id="file-lucene4cosine-java-LC15" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                public
+                              </span>
+                              <span class="pl-k">
+                                static
+                              </span>
+                              <span class="pl-k">
+                                final
+                              </span>
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-c1">
+                                CONTENT
+                              </span>
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-s">
+                                <span class="pl-pds">
+                                  "
+                                </span>
+                                Content
+                                <span class="pl-pds">
+                                  "
+                                </span>
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L16" class="blob-num js-line-number" data-line-number="16"/>
+                            <td id="file-lucene4cosine-java-LC16" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L17" class="blob-num js-line-number" data-line-number="17"/>
+                            <td id="file-lucene4cosine-java-LC17" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                private
+                              </span>
+                              <span class="pl-k">
+                                final
+                              </span>
+                              <span class="pl-k">
+                                Set&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                &gt;
+                              </span>
+                               terms 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-k">
+                                HashSet&lt;&gt;
+                              </span>
+                              ();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L18" class="blob-num js-line-number" data-line-number="18"/>
+                            <td id="file-lucene4cosine-java-LC18" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                private
+                              </span>
+                              <span class="pl-k">
+                                final
+                              </span>
+                              <span class="pl-smi">
+                                RealVector
+                              </span>
+                               v1;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L19" class="blob-num js-line-number" data-line-number="19"/>
+                            <td id="file-lucene4cosine-java-LC19" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                private
+                              </span>
+                              <span class="pl-k">
+                                final
+                              </span>
+                              <span class="pl-smi">
+                                RealVector
+                              </span>
+                               v2;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L20" class="blob-num js-line-number" data-line-number="20"/>
+                            <td id="file-lucene4cosine-java-LC20" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L21" class="blob-num js-line-number" data-line-number="21"/>
+                            <td id="file-lucene4cosine-java-LC21" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-en">
+                                CosineDocumentSimilarity
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s1
+                              </span>
+                              , 
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s2
+                              </span>
+                              ) 
+                              <span class="pl-k">
+                                throws
+                              </span>
+                              <span class="pl-smi">
+                                IOException
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L22" class="blob-num js-line-number" data-line-number="22"/>
+                            <td id="file-lucene4cosine-java-LC22" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Directory
+                              </span>
+                               directory 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               createIndex(s1, s2);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L23" class="blob-num js-line-number" data-line-number="23"/>
+                            <td id="file-lucene4cosine-java-LC23" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                IndexReader
+                              </span>
+                               reader 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-smi">
+                                DirectoryReader
+                              </span>
+                              <span class="pl-k">
+                                .
+                              </span>
+                              open(directory);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L24" class="blob-num js-line-number" data-line-number="24"/>
+                            <td id="file-lucene4cosine-java-LC24" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                Map&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                , 
+                                <span class="pl-smi">
+                                  Integer
+                                </span>
+                                &gt;
+                              </span>
+                               f1 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               getTermFrequencies(reader, 
+                              <span class="pl-c1">
+                                0
+                              </span>
+                              );
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L25" class="blob-num js-line-number" data-line-number="25"/>
+                            <td id="file-lucene4cosine-java-LC25" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                Map&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                , 
+                                <span class="pl-smi">
+                                  Integer
+                                </span>
+                                &gt;
+                              </span>
+                               f2 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               getTermFrequencies(reader, 
+                              <span class="pl-c1">
+                                1
+                              </span>
+                              );
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L26" class="blob-num js-line-number" data-line-number="26"/>
+                            <td id="file-lucene4cosine-java-LC26" class="blob-code blob-code-inner js-file-line">
+                                      reader
+                              <span class="pl-k">
+                                .
+                              </span>
+                              close();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L27" class="blob-num js-line-number" data-line-number="27"/>
+                            <td id="file-lucene4cosine-java-LC27" class="blob-code blob-code-inner js-file-line">
+                                      v1 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               toRealVector(f1);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L28" class="blob-num js-line-number" data-line-number="28"/>
+                            <td id="file-lucene4cosine-java-LC28" class="blob-code blob-code-inner js-file-line">
+                                      v2 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               toRealVector(f2);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L29" class="blob-num js-line-number" data-line-number="29"/>
+                            <td id="file-lucene4cosine-java-LC29" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L30" class="blob-num js-line-number" data-line-number="30"/>
+                            <td id="file-lucene4cosine-java-LC30" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L31" class="blob-num js-line-number" data-line-number="31"/>
+                            <td id="file-lucene4cosine-java-LC31" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Directory
+                              </span>
+                              <span class="pl-en">
+                                createIndex
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s1
+                              </span>
+                              , 
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s2
+                              </span>
+                              ) 
+                              <span class="pl-k">
+                                throws
+                              </span>
+                              <span class="pl-smi">
+                                IOException
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L32" class="blob-num js-line-number" data-line-number="32"/>
+                            <td id="file-lucene4cosine-java-LC32" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Directory
+                              </span>
+                               directory 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                RAMDirectory
+                              </span>
+                              ();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L33" class="blob-num js-line-number" data-line-number="33"/>
+                            <td id="file-lucene4cosine-java-LC33" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Analyzer
+                              </span>
+                               analyzer 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                SimpleAnalyzer
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                Version
+                              </span>
+                              <span class="pl-c1">
+                                <span class="pl-k">
+                                  .
+                                </span>
+                                LUCENE_40
+                              </span>
+                              );
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L34" class="blob-num js-line-number" data-line-number="34"/>
+                            <td id="file-lucene4cosine-java-LC34" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                IndexWriterConfig
+                              </span>
+                               iwc 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                IndexWriterConfig
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                Version
+                              </span>
+                              <span class="pl-c1">
+                                <span class="pl-k">
+                                  .
+                                </span>
+                                LUCENE_40
+                              </span>
+                              ,
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L35" class="blob-num js-line-number" data-line-number="35"/>
+                            <td id="file-lucene4cosine-java-LC35" class="blob-code blob-code-inner js-file-line">
+                                              analyzer);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L36" class="blob-num js-line-number" data-line-number="36"/>
+                            <td id="file-lucene4cosine-java-LC36" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                IndexWriter
+                              </span>
+                               writer 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                IndexWriter
+                              </span>
+                              (directory, iwc);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L37" class="blob-num js-line-number" data-line-number="37"/>
+                            <td id="file-lucene4cosine-java-LC37" class="blob-code blob-code-inner js-file-line">
+                                      addDocument(writer, s1);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L38" class="blob-num js-line-number" data-line-number="38"/>
+                            <td id="file-lucene4cosine-java-LC38" class="blob-code blob-code-inner js-file-line">
+                                      addDocument(writer, s2);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L39" class="blob-num js-line-number" data-line-number="39"/>
+                            <td id="file-lucene4cosine-java-LC39" class="blob-code blob-code-inner js-file-line">
+                                      writer
+                              <span class="pl-k">
+                                .
+                              </span>
+                              close();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L40" class="blob-num js-line-number" data-line-number="40"/>
+                            <td id="file-lucene4cosine-java-LC40" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                return
+                              </span>
+                               directory;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L41" class="blob-num js-line-number" data-line-number="41"/>
+                            <td id="file-lucene4cosine-java-LC41" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L42" class="blob-num js-line-number" data-line-number="42"/>
+                            <td id="file-lucene4cosine-java-LC42" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L43" class="blob-num js-line-number" data-line-number="43"/>
+                            <td id="file-lucene4cosine-java-LC43" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                void
+                              </span>
+                              <span class="pl-en">
+                                addDocument
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                IndexWriter
+                              </span>
+                              <span class="pl-v">
+                                writer
+                              </span>
+                              , 
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                content
+                              </span>
+                              ) 
+                              <span class="pl-k">
+                                throws
+                              </span>
+                              <span class="pl-smi">
+                                IOException
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L44" class="blob-num js-line-number" data-line-number="44"/>
+                            <td id="file-lucene4cosine-java-LC44" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Document
+                              </span>
+                               doc 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                Document
+                              </span>
+                              ();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L45" class="blob-num js-line-number" data-line-number="45"/>
+                            <td id="file-lucene4cosine-java-LC45" class="blob-code blob-code-inner js-file-line">
+                                      doc
+                              <span class="pl-k">
+                                .
+                              </span>
+                              add(
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                VecTextField
+                              </span>
+                              (
+                              <span class="pl-c1">
+                                CONTENT
+                              </span>
+                              , content, 
+                              <span class="pl-smi">
+                                Store
+                              </span>
+                              <span class="pl-c1">
+                                <span class="pl-k">
+                                  .
+                                </span>
+                                YES
+                              </span>
+                              ));
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L46" class="blob-num js-line-number" data-line-number="46"/>
+                            <td id="file-lucene4cosine-java-LC46" class="blob-code blob-code-inner js-file-line">
+                                      writer
+                              <span class="pl-k">
+                                .
+                              </span>
+                              addDocument(doc);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L47" class="blob-num js-line-number" data-line-number="47"/>
+                            <td id="file-lucene4cosine-java-LC47" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L48" class="blob-num js-line-number" data-line-number="48"/>
+                            <td id="file-lucene4cosine-java-LC48" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L49" class="blob-num js-line-number" data-line-number="49"/>
+                            <td id="file-lucene4cosine-java-LC49" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                double
+                              </span>
+                              <span class="pl-en">
+                                getCosineSimilarity
+                              </span>
+                              () {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L50" class="blob-num js-line-number" data-line-number="50"/>
+                            <td id="file-lucene4cosine-java-LC50" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                return
+                              </span>
+                               (v1
+                              <span class="pl-k">
+                                .
+                              </span>
+                              dotProduct(v2)) 
+                              <span class="pl-k">
+                                /
+                              </span>
+                               (v1
+                              <span class="pl-k">
+                                .
+                              </span>
+                              getNorm() 
+                              <span class="pl-k">
+                                *
+                              </span>
+                               v2
+                              <span class="pl-k">
+                                .
+                              </span>
+                              getNorm());
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L51" class="blob-num js-line-number" data-line-number="51"/>
+                            <td id="file-lucene4cosine-java-LC51" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L52" class="blob-num js-line-number" data-line-number="52"/>
+                            <td id="file-lucene4cosine-java-LC52" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L53" class="blob-num js-line-number" data-line-number="53"/>
+                            <td id="file-lucene4cosine-java-LC53" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                public
+                              </span>
+                              <span class="pl-k">
+                                static
+                              </span>
+                              <span class="pl-k">
+                                double
+                              </span>
+                              <span class="pl-en">
+                                getCosineSimilarity
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s1
+                              </span>
+                              , 
+                              <span class="pl-smi">
+                                String
+                              </span>
+                              <span class="pl-v">
+                                s2
+                              </span>
+                              )
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L54" class="blob-num js-line-number" data-line-number="54"/>
+                            <td id="file-lucene4cosine-java-LC54" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                throws
+                              </span>
+                              <span class="pl-smi">
+                                IOException
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L55" class="blob-num js-line-number" data-line-number="55"/>
+                            <td id="file-lucene4cosine-java-LC55" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                return
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                CosineDocumentSimilarity
+                              </span>
+                              (s1, s2)
+                              <span class="pl-k">
+                                .
+                              </span>
+                              getCosineSimilarity();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L56" class="blob-num js-line-number" data-line-number="56"/>
+                            <td id="file-lucene4cosine-java-LC56" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L57" class="blob-num js-line-number" data-line-number="57"/>
+                            <td id="file-lucene4cosine-java-LC57" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L58" class="blob-num js-line-number" data-line-number="58"/>
+                            <td id="file-lucene4cosine-java-LC58" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                Map&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                , 
+                                <span class="pl-smi">
+                                  Integer
+                                </span>
+                                &gt;
+                              </span>
+                              <span class="pl-en">
+                                getTermFrequencies
+                              </span>
+                              (
+                              <span class="pl-smi">
+                                IndexReader
+                              </span>
+                              <span class="pl-v">
+                                reader
+                              </span>
+                              , 
+                              <span class="pl-k">
+                                int
+                              </span>
+                              <span class="pl-v">
+                                docId
+                              </span>
+                              )
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L59" class="blob-num js-line-number" data-line-number="59"/>
+                            <td id="file-lucene4cosine-java-LC59" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                throws
+                              </span>
+                              <span class="pl-smi">
+                                IOException
+                              </span>
+                               {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L60" class="blob-num js-line-number" data-line-number="60"/>
+                            <td id="file-lucene4cosine-java-LC60" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                Terms
+                              </span>
+                               vector 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               reader
+                              <span class="pl-k">
+                                .
+                              </span>
+                              getTermVector(docId, 
+                              <span class="pl-c1">
+                                CONTENT
+                              </span>
+                              );
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L61" class="blob-num js-line-number" data-line-number="61"/>
+                            <td id="file-lucene4cosine-java-LC61" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                TermsEnum
+                              </span>
+                               termsEnum 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-c1">
+                                null
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L62" class="blob-num js-line-number" data-line-number="62"/>
+                            <td id="file-lucene4cosine-java-LC62" class="blob-code blob-code-inner js-file-line">
+                                      termsEnum 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               vector
+                              <span class="pl-k">
+                                .
+                              </span>
+                              iterator(termsEnum);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L63" class="blob-num js-line-number" data-line-number="63"/>
+                            <td id="file-lucene4cosine-java-LC63" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                Map&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                , 
+                                <span class="pl-smi">
+                                  Integer
+                                </span>
+                                &gt;
+                              </span>
+                               frequencies 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-k">
+                                HashMap&lt;&gt;
+                              </span>
+                              ();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L64" class="blob-num js-line-number" data-line-number="64"/>
+                            <td id="file-lucene4cosine-java-LC64" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                BytesRef
+                              </span>
+                               text 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-c1">
+                                null
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L65" class="blob-num js-line-number" data-line-number="65"/>
+                            <td id="file-lucene4cosine-java-LC65" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                while
+                              </span>
+                               ((text 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               termsEnum
+                              <span class="pl-k">
+                                .
+                              </span>
+                              next()) 
+                              <span class="pl-k">
+                                !=
+                              </span>
+                              <span class="pl-c1">
+                                null
+                              </span>
+                              ) {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L66" class="blob-num js-line-number" data-line-number="66"/>
+                            <td id="file-lucene4cosine-java-LC66" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                String
+                              </span>
+                               term 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               text
+                              <span class="pl-k">
+                                .
+                              </span>
+                              utf8ToString();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L67" class="blob-num js-line-number" data-line-number="67"/>
+                            <td id="file-lucene4cosine-java-LC67" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                int
+                              </span>
+                               freq 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               (
+                              <span class="pl-k">
+                                int
+                              </span>
+                              ) termsEnum
+                              <span class="pl-k">
+                                .
+                              </span>
+                              totalTermFreq();
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L68" class="blob-num js-line-number" data-line-number="68"/>
+                            <td id="file-lucene4cosine-java-LC68" class="blob-code blob-code-inner js-file-line">
+                                          frequencies
+                              <span class="pl-k">
+                                .
+                              </span>
+                              put(term, freq);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L69" class="blob-num js-line-number" data-line-number="69"/>
+                            <td id="file-lucene4cosine-java-LC69" class="blob-code blob-code-inner js-file-line">
+                                          terms
+                              <span class="pl-k">
+                                .
+                              </span>
+                              add(term);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L70" class="blob-num js-line-number" data-line-number="70"/>
+                            <td id="file-lucene4cosine-java-LC70" class="blob-code blob-code-inner js-file-line">
+                                      }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L71" class="blob-num js-line-number" data-line-number="71"/>
+                            <td id="file-lucene4cosine-java-LC71" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                return
+                              </span>
+                               frequencies;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L72" class="blob-num js-line-number" data-line-number="72"/>
+                            <td id="file-lucene4cosine-java-LC72" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L73" class="blob-num js-line-number" data-line-number="73"/>
+                            <td id="file-lucene4cosine-java-LC73" class="blob-code blob-code-inner js-file-line">
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L74" class="blob-num js-line-number" data-line-number="74"/>
+                            <td id="file-lucene4cosine-java-LC74" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                RealVector
+                              </span>
+                              <span class="pl-en">
+                                toRealVector
+                              </span>
+                              (
+                              <span class="pl-k">
+                                Map&lt;
+                                <span class="pl-smi">
+                                  String
+                                </span>
+                                , 
+                                <span class="pl-smi">
+                                  Integer
+                                </span>
+                                &gt;
+                              </span>
+                              <span class="pl-v">
+                                map
+                              </span>
+                              ) {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L75" class="blob-num js-line-number" data-line-number="75"/>
+                            <td id="file-lucene4cosine-java-LC75" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-smi">
+                                RealVector
+                              </span>
+                               vector 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-k">
+                                new
+                              </span>
+                              <span class="pl-smi">
+                                ArrayRealVector
+                              </span>
+                              (terms
+                              <span class="pl-k">
+                                .
+                              </span>
+                              size());
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L76" class="blob-num js-line-number" data-line-number="76"/>
+                            <td id="file-lucene4cosine-java-LC76" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                int
+                              </span>
+                               i 
+                              <span class="pl-k">
+                                =
+                              </span>
+                              <span class="pl-c1">
+                                0
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L77" class="blob-num js-line-number" data-line-number="77"/>
+                            <td id="file-lucene4cosine-java-LC77" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                for
+                              </span>
+                               (
+                              <span class="pl-smi">
+                                String
+                              </span>
+                               term 
+                              <span class="pl-k">
+                                :
+                              </span>
+                               terms) {
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L78" class="blob-num js-line-number" data-line-number="78"/>
+                            <td id="file-lucene4cosine-java-LC78" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                int
+                              </span>
+                               value 
+                              <span class="pl-k">
+                                =
+                              </span>
+                               map
+                              <span class="pl-k">
+                                .
+                              </span>
+                              containsKey(term) 
+                              <span class="pl-k">
+                                ?
+                              </span>
+                               map
+                              <span class="pl-k">
+                                .
+                              </span>
+                              get(term) 
+                              <span class="pl-k">
+                                :
+                              </span>
+                              <span class="pl-c1">
+                                0
+                              </span>
+                              ;
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L79" class="blob-num js-line-number" data-line-number="79"/>
+                            <td id="file-lucene4cosine-java-LC79" class="blob-code blob-code-inner js-file-line">
+                                          vector
+                              <span class="pl-k">
+                                .
+                              </span>
+                              setEntry(i
+                              <span class="pl-k">
+                                ++
+                              </span>
+                              , value);
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L80" class="blob-num js-line-number" data-line-number="80"/>
+                            <td id="file-lucene4cosine-java-LC80" class="blob-code blob-code-inner js-file-line">
+                                      }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L81" class="blob-num js-line-number" data-line-number="81"/>
+                            <td id="file-lucene4cosine-java-LC81" class="blob-code blob-code-inner js-file-line">
+                              <span class="pl-k">
+                                return
+                              </span>
+                               (
+                              <span class="pl-smi">
+                                RealVector
+                              </span>
+                              ) vector
+                              <span class="pl-k">
+                                .
+                              </span>
+                              mapDivide(vector
+                              <span class="pl-k">
+                                .
+                              </span>
+                              getL1Norm());
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L82" class="blob-num js-line-number" data-line-number="82"/>
+                            <td id="file-lucene4cosine-java-LC82" class="blob-code blob-code-inner js-file-line">
+                                  }
+                            </td>
+                          </tr>
+                          <tr>
+                            <td id="file-lucene4cosine-java-L83" class="blob-num js-line-number" data-line-number="83"/>
+                            <td id="file-lucene4cosine-java-LC83" class="blob-code blob-code-inner js-file-line">
+                              }
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+                <a name="comments">
+                </a>
+                <div class="discussion-timeline gist-discussion-timeline js-quote-selection-container ">
+                  <div class="js-discussion js-socket-channel" data-channel="tenant:1:marked-as-read:gist:4672977">
+                    <!-- Rendered timeline since 2016-02-29 00:47:22 -->                    <div id="partial-timeline-marker" class="js-timeline-marker js-updatable-content" data-url="/butlermh/4672977/show_partial?partial=gist%2Ftimeline_marker&amp;since=1456735642" data-last-modified="Mon, 29 Feb 2016 08:47:22 GMT">
+                    </div>
+                    <div class="discussion-timeline-actions">
+                      <div class="signed-out-comment">
+                        <a href="/join?source=comment-gist" class="btn btn-primary" rel="nofollow">
+                          Sign up for free
+                        </a>
+                        <strong>
+                          to join this conversation on GitHub
+                        </strong>
+                        .
+    Already have an account?
+    
+                        <a href="/login?return_to=https%3A%2F%2Fgist.github.com%2Fbutlermh%2F4672977" rel="nofollow">
+                          Sign in to comment
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-backdrop js-touch-events">
+            </div>
+          </div>
+          <!-- /.container -->        </div>
+        <!-- /.gist-pjax-container -->      </div>
+    </div>
+    <div class="container site-footer-container">
+      <div class="site-footer" role="contentinfo">
+        <ul class="site-footer-links right">
+          <li>
+            <a href="https://github.com/contact" data-ga-click="Footer, go to contact, text:contact">
+              Contact GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://developer.github.com" data-ga-click="Footer, go to api, text:api">
+              API
+            </a>
+          </li>
+          <li>
+            <a href="https://training.github.com" data-ga-click="Footer, go to training, text:training">
+              Training
+            </a>
+          </li>
+          <li>
+            <a href="https://shop.github.com" data-ga-click="Footer, go to shop, text:shop">
+              Shop
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/blog" data-ga-click="Footer, go to blog, text:blog">
+              Blog
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/about" data-ga-click="Footer, go to about, text:about">
+              About
+            </a>
+          </li>
+        </ul>
+        <a href="https://github.com" aria-label="Homepage" class="site-footer-mark" title="GitHub">
+          <svg aria-hidden="true" class="octicon octicon-mark-github" height="24" version="1.1" viewbox="0 0 16 16" width="24">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0 0 16 8c0-4.42-3.58-8-8-8z">
+            </path>
+          </svg>
+        </a>
+        <ul class="site-footer-links">
+          <li>
+            © 2016 
+            <span title="0.03637s from github-fe120-cp1-prd.iad.github.net">
+              GitHub
+            </span>
+            , Inc.
+          </li>
+          <li>
+            <a href="https://github.com/site/terms" data-ga-click="Footer, go to terms, text:terms">
+              Terms
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/site/privacy" data-ga-click="Footer, go to privacy, text:privacy">
+              Privacy
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/security" data-ga-click="Footer, go to security, text:security">
+              Security
+            </a>
+          </li>
+          <li>
+            <a href="https://status.github.com/" data-ga-click="Footer, go to status, text:status">
+              Status
+            </a>
+          </li>
+          <li>
+            <a href="https://help.github.com" data-ga-click="Footer, go to help, text:help">
+              Help
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div id="ajax-error-message" class="ajax-error-message flash flash-error">
+      <svg aria-hidden="true" class="octicon octicon-alert" height="16" version="1.1" viewbox="0 0 16 16" width="16">
+        <path d="M8.865 1.52c-.18-.31-.51-.5-.87-.5s-.69.19-.87.5L.275 13.5c-.18.31-.18.69 0 1 .19.31.52.5.87.5h13.7c.36 0 .69-.19.86-.5.17-.31.18-.69.01-1L8.865 1.52zM8.995 13h-2v-2h2v2zm0-3h-2V6h2v4z">
+        </path>
+      </svg>
+      <button type="button" class="flash-close js-flash-close js-ajax-error-dismiss" aria-label="Dismiss error">
+        <svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+          <path d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z">
+          </path>
+        </svg>
+      </button>
+      
+      Something went wrong with that request. Please try again.
+    
+    </div>
+    <script crossorigin="anonymous" integrity="sha256-QEzdGt0fcQ2wFqAuXjH/+KkInRT/DCJ9+GK3gIhtt9U=" src="https://assets-cdn.github.com/assets/frameworks-404cdd1add1f710db016a02e5e31fff8a9089d14ff0c227df862b780886db7d5.js">
+    </script>
+    <script async="async" crossorigin="anonymous" integrity="sha256-vabI89d3JD+RkvdyXWgGc6oTOU6u7lCB5T8A5C6VACg=" src="https://assets-cdn.github.com/assets/github-bda6c8f3d777243f9192f7725d680673aa13394eaeee5081e53f00e42e950028.js">
+    </script>
+    <div class="js-stale-session-flash stale-session-flash flash flash-warn flash-banner hidden">
+      <svg aria-hidden="true" class="octicon octicon-alert" height="16" version="1.1" viewbox="0 0 16 16" width="16">
+        <path d="M8.865 1.52c-.18-.31-.51-.5-.87-.5s-.69.19-.87.5L.275 13.5c-.18.31-.18.69 0 1 .19.31.52.5.87.5h13.7c.36 0 .69-.19.86-.5.17-.31.18-.69.01-1L8.865 1.52zM8.995 13h-2v-2h2v2zm0-3h-2V6h2v4z">
+        </path>
+      </svg>
+      <span class="signed-in-tab-flash">
+        You signed in with another tab or window. 
+        <a href="">
+          Reload
+        </a>
+         to refresh your session.
+      </span>
+      <span class="signed-out-tab-flash">
+        You signed out in another tab or window. 
+        <a href="">
+          Reload
+        </a>
+         to refresh your session.
+      </span>
+    </div>
+    <div class="facebox" id="facebox" style="display:none;">
+      <div class="facebox-popup">
+        <div class="facebox-content" role="dialog" aria-labelledby="facebox-header" aria-describedby="facebox-description">
+        </div>
+        <button type="button" class="facebox-close js-facebox-close" aria-label="Close modal">
+          <svg aria-hidden="true" class="octicon octicon-x" height="16" version="1.1" viewbox="0 0 12 16" width="12">
+            <path d="M7.48 8l3.75 3.75-1.48 1.48L6 9.48l-3.75 3.75-1.48-1.48L4.52 8 .77 4.25l1.48-1.48L6 6.52l3.75-3.75 1.48 1.48z">
+            </path>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </body>
+</html>

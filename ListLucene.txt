@@ -1,0 +1,50 @@
+get cosine similarity between two documents
+get a Token from a TokenStream
+query auto-complete suggest
+iterate through documents 
+get matched terms
+normalise score
+N-gram generation
+search exact phrase
+Stem English words
+Find documents with a certain field
+highlight search keywords
+find position of search hit
+using hit highlighter
+wildcards in phrases
+Multi-word phrases as search term
+Ignore tf/idf
+create index using FSDirectory
+keep index in ram
+tokenize a string
+QueryParser with multiple fields
+count results in categories
+paging results
+use Porter Stemmer
+get all the indexed keywords
+sort result with weight function
+use TermVector
+nested boolean query
+search email address
+word frequency in all lucene index
+get hits number per document
+achieve pagination
+search int field
+using RAMDirectory
+case-insensitive search
+get document score 
+search url
+use WikipediaTokenizer
+use multiphrasequery
+highlight sentence
+get tf-idf vector
+fuzzy search
+slow to add document
+more weight to the beginning term
+StandardAnalyzer with no stop words
+index and search Date
+search special characters
+search between dates
+use ControlledRealTimeReopenThread 
+integrate RAMDirectory into FSDirectory
+tokenize and remove stop words
