@@ -95,13 +95,13 @@ public class EmailSiteCrawler extends Crawler {
 				FileUtil.write(storagePath,html);
 			}
 			if (html == null) continue;
-			if (Smeller.smell(html,url.getUrl(), project)){
+			if (Smeller.smell(html,url.getUrl(), getProject())){
 				System.out.println("smell ++ :" + url.getUrl());
-				Detector detector = Smeller.smellEntry(html,url.getUrl(), project);
+				Detector detector = Smeller.smellEntry(html,url.getUrl(), getProject());
 				if (detector != null){
 					if (!this.hasSmell(url)){
 						this.addSmell(url);
-						Smeller.dispatch(url.getUrl(), project, detector);
+						Smeller.dispatch(url.getUrl(), getProject(), detector);
 					}
 				}
 				continue;
@@ -116,17 +116,17 @@ public class EmailSiteCrawler extends Crawler {
 						System.out.println(url.getUrl());
 					}
 					u.setDepth(url.getDepth() + 1);
-					if (Smeller.smell("",u.getUrl(), project)){
+					if (Smeller.smell("",u.getUrl(), getProject())){
 						System.out.println("smell ++ :" + u.getUrl());
-						Detector detector = Smeller.smellEntry("",u.getUrl(), project);
+						Detector detector = Smeller.smellEntry("",u.getUrl(), getProject());
 						if (detector != null){
 							if (!this.hasSmell(u)){
 								this.addSmell(u);
-								Smeller.dispatch(u.getUrl(), project, detector);
+								Smeller.dispatch(u.getUrl(), getProject(), detector);
 							}
 						}
 					}
-					if (HtmlDownloader.getHost(u.getUrl()).contains(project.getHostUrl())){
+					if (HtmlDownloader.getHost(u.getUrl()).contains(getProject().getHostUrl())){
 						this.addUrl(u);
 					}
 				}

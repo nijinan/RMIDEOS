@@ -36,7 +36,7 @@ public class CrawlerTaskManager {
 	
 	public static void addCrawlerTask(Crawler crawler){
 		try {
-			CrawlerTaskDao.insertCrawlerTask(crawler.toCrawlerTask());
+			CrawlerTaskDao.insertCrawlerTask(crawler.crawlTask);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

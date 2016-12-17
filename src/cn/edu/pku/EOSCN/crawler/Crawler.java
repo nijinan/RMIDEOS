@@ -26,67 +26,49 @@ public abstract class Crawler extends Thread{
 	public static final int SUB = 1;
 	public static final int FULL = 2;
 	
-	private CrawlerTask crawlTask;
+	public CrawlerTask crawlTask = new CrawlerTask();
 	
 	protected static final Logger logger = Logger.getLogger(Crawler.class.getName());
-	protected String crawleruuid = UUID.randomUUID().toString();
-	private String resourceType;
 	public boolean needLog = false;
-	public int crawlerType = FULL;
-	public int subCrawlerNum = 4;
-	public int subCrawlerRun = 4;
+	public int crawlerType = MAIN;
+	public int subCrawlerNum = 3;
+	public int subCrawlerRun = 3;
 	public int subid;
-	public boolean isServerTask = true;
 	public Crawler father;
-	private int status = WAITING;
-	private int percentage = 0;
 	private String entrys;
 	public boolean hostwating = false;
-	protected Project project = null;
 	public Project getProject() {
-		return project;
+		return crawlTask.getProject();
 	}
 
 	public String getResourceType() {
-		return resourceType;
+		return crawlTask.getResourceType();
 	}
 
 	public void setResourceType(String resourceType) {
-		this.resourceType = resourceType;
+		crawlTask.setResourceType(resourceType);
 	}
 
 	public void setProject(Project project) {
-		this.project = project;
+		crawlTask.setProject(project);
 	}
 	
 	public int getStatus() {
-		return status;
+		return crawlTask.getStatus();
 	}
 
 	public void setStatus(int status) {
-		this.status = status;
+		crawlTask.setStatus(status);
 	}
 
-	public int getPercentage() {
-		return percentage;
-	}
-
-	public void setPercentage(int percentage) {
-		this.percentage = percentage;
-	}
 	
-	/**
-	 * @author 寮犵伒绠�
-	 * 榛樿鏋勯�犳柟娉�
-	 * 娴嬭瘯鏃惰璋冪敤甯﹀弬鏁扮殑鏋勯�犳柟娉�
-	 */
 	public Crawler(){
 		
 	}
 	
     @Override
     public final void run() {
-        status = IN_PROGRESS;
+    	setStatus(IN_PROGRESS);
         try {
         	this.init();
             this.Crawl();
@@ -96,10 +78,6 @@ public abstract class Crawler extends Thread{
 		}
     } 
     
-
-	public void addPercentageBy(int i) {
-		percentage += i;
-	}
     
 	abstract public void init()throws Exception;
 	abstract public void crawl_url()throws Exception;
@@ -122,7 +100,7 @@ public abstract class Crawler extends Thread{
 				Crawler crawler = (Crawler)Class.forName(this.getClass().getName()).newInstance();
 				crawler.crawlerType = Crawler.SUB;
 				crawler.subid = i;				
-				crawler.project = this.project;
+				crawler.setProject(this.getProject());
 				crawler.needLog = true;
 				crawler.father = this;
 				crawler.entrys = this.entrys;
@@ -144,11 +122,11 @@ public abstract class Crawler extends Thread{
 	}
 
 	public void setCrawleruuid(String crawleruuid) {
-		this.crawleruuid = crawleruuid;
+		crawlTask.setUuid(crawleruuid);
 	}
 
 	public String getCrawleruuid() {
-		return crawleruuid;
+		return crawlTask.getUuid();
 	}
 	
 	public final void finish() {
@@ -161,15 +139,6 @@ public abstract class Crawler extends Thread{
 	}
 	public void next(){
 		
-	}
-	public CrawlerTask toCrawlerTask(){
-		CrawlerTask crawlerTask = new CrawlerTask();
-		crawlerTask.setUuid(crawleruuid);
-		crawlerTask.setStatus(status);
-		crawlerTask.setEntrys(entrys);
-		crawlerTask.setResourceType(resourceType);
-		crawlerTask.setProjectUuid(project.getUuid());
-		return crawlerTask;
 	}
 
 	public String getEntrys() {

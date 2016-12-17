@@ -40,7 +40,7 @@ public class HtmlDownloader {
 	}
 	public static String downloadOrin(String urlString, Map<String, List<String>> headers, ProxyAddress proxyaddr){
 		StringBuffer document = new StringBuffer();
-		//System.out.println("connecting to :" + urlString);
+		System.out.println("connecting to :" + urlString);
  		if (proxyaddr != null) System.out.println("using "+proxyaddr.getIP()+":"+proxyaddr.getPort());
 	 	try { 
 	 		URL url = new URL(urlString); 

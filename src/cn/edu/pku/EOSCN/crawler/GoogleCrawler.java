@@ -66,7 +66,7 @@ public class GoogleCrawler extends Crawler {
 		Random rd = new Random();
 		int num=0;   //总的链接数
 		String projectName = null;
-		projectName = URLEncoder.encode(project.getName(), "utf-8");
+		projectName = URLEncoder.encode(getProject().getName(), "utf-8");
 		String GoogleSearchUrl = googleApiBase.replace("%NUM%", TOT_CRAWL_NUM).replace("%QUERY%", projectName);
 		
 		String url = GoogleSearchUrl + "&start=" + num;

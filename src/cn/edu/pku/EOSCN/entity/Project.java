@@ -1,5 +1,6 @@
 package cn.edu.pku.EOSCN.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -12,7 +13,7 @@ import cn.edu.pku.EOSCN.util.XMLUtils;
  *
  */
 
-public class Project {
+public class Project implements Serializable {
 
 	public static final String JAVA = "Java";
 	public static final String CPP = "C++";

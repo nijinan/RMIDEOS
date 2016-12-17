@@ -22,7 +22,6 @@ public class CrawlerTask implements Serializable{
 	private String uuid;
 	private String resourceType;
 	public boolean needLog = false;
-	public int crawlerType = FULL;
 	public int subid;
 	private String projectUuid;
 	private Project project;
@@ -31,6 +30,7 @@ public class CrawlerTask implements Serializable{
 	private Date finishTime = null;
 	private String entrys = "";
 	private int status = WAITING;
+	public boolean isSlaver = false;
 	
 	public CrawlerTask(){}
 	
@@ -84,13 +84,13 @@ public class CrawlerTask implements Serializable{
 		if (resourceType == null) return null;
 		Crawler crawler = null;
 		try {
-			crawler = (Crawler) Class.forName(Crawler.class.getPackage().getName() + "." + resourceType +"Crawler").newInstance();
-			Project project = ProjectDAO.getProjectByUuid(projectUuid);
-			if (project == null) return null;
-			crawler.setProject(project);
-			crawler.setCrawleruuid(uuid);
-			crawler.setStatus(status);
-			crawler.setEntrys(entrys);
+			String name = Crawler.class.getPackage().getName() + "." + resourceType +"Crawler";
+			if (isSlaver) name = name + "Slaver";
+			crawler = (Crawler) Class.forName(name).newInstance();
+			crawler.crawlTask = this;
+			//Project project = ProjectDAO.getProjectByUuid(projectUuid);
+			//if (project == null) return null;
+			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

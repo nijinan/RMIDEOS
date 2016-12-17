@@ -91,7 +91,7 @@ public class MainSiteCrawler extends Crawler {
 			}
 			if (html == null) continue;
 			if (url.getDepth() >= this.maxdepth) continue;
-			if (Smeller.smell(html,url.getUrl(), project)){
+			if (Smeller.smell(html,url.getUrl(), getProject())){
 				System.out.println("smell ++ :" + url.getUrl());
 				continue;
 			}
@@ -101,7 +101,7 @@ public class MainSiteCrawler extends Crawler {
 				if (!this.hasUrl(u)){
 					u.setDocName(u.getUrl().replaceAll("[<>\\/:*?]", ""));
 					u.setDepth(url.getDepth() + 1);
-					if (HtmlDownloader.getHost(u.getUrl()).contains(project.getHostUrl()))
+					if (HtmlDownloader.getHost(u.getUrl()).contains(getProject().getHostUrl()))
 						this.addUrl(u);
 				}
 			}
